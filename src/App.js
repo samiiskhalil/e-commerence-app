@@ -5,18 +5,20 @@ import  {useState}  from 'react'
 import SaveIcon from '@mui/icons-material/Save'
 import DeleteIcon from '@mui/icons-material/Delete'
 import CheckboxIcon from '@mui/material/Checkbox'
-import {makeStyles} from '@mui/styles'
+import {makeStyles,ThemeProvider} from '@mui/styles'
 const useStyles=makeStyles({
   root:{
-    border:0,
+    background:'linear-gradient(45deg,#fe6888,#ff8e53)'
+    ,border:0,
     borderRadius:15,
+    marginBottom:200,
+    padding:'5px,30px',
     color:'white',
-    padding:0,
-    background:'linear-gradient(45deg,#333,#999)'
+    padding:0
   }
 })
 let StyledButton=()=>{
-  let classes=makeStyles()
+  let classes=useStyles()
   return <Button className={classes.root}>testing</Button>
 }
 
@@ -27,7 +29,10 @@ let CheckBox =()=>{
   return(
     <>
     <StyledButton/>
-  <TextField variant='standard' />
+  <TextField
+  label='name'
+   variant='outlined'
+   color='primary' />
     <CheckboxIcon 
     checkedIcon={<DeleteIcon/>}
     icon={<SaveIcon/>}
@@ -39,7 +44,7 @@ let CheckBox =()=>{
 }
 const App = () => {
   return (
-    
+<ThemeProvider>  
     <div className='container'>
     <CheckBox/>
       <ButtonGroup>
@@ -47,7 +52,7 @@ const App = () => {
 
 <Button startIcon={<SaveIcon/>}  variant='contained'  >  Save</Button>
   </ButtonGroup>  </div>
-  )
+</ThemeProvider>)  
 }
 
 export default App
