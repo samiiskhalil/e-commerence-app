@@ -1,6 +1,7 @@
 import React from 'react'
 import {Grid} from '@material-ui/core'
 import Product from './product/Product.jsx'
+import useStyles from './styles.js'
 const products=[{
     name:'shoe',
     description:"this shoe is awsome",
@@ -11,7 +12,10 @@ const products=[{
     }
 ]
 const Products = () => {
+    const classes=useStyles()
     return (
+        <main className={classes.content} >
+            <div className={classes.toolbar} />
        <Grid container justifyContent='center' >
 {products.map((product)=>
 
@@ -20,6 +24,7 @@ const Products = () => {
 </Grid>
 )}
        </Grid>
+       </main>
     )
 }
 export default Products
