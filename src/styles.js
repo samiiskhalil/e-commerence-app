@@ -12,6 +12,7 @@ buttons:{
 marginTop:'40px'
 },
 cardGrid:{
+    
     padding:'20px 0'
 },
 card:{
@@ -24,6 +25,7 @@ cardMedia:{
 },
 cardContent:{
     flexGrow:1
+},footer:{  backgroundColor:theme.palette.background.paper,
 }
 }))
 export default useStyles

@@ -10,7 +10,7 @@ const App = () => {
     <>
 <CssBaseline/>
 
-<AppBar color='secondary' position='relative' >
+<AppBar color='primary' position='relative' >
   <Toolbar  >
     <PhotoCamera className={classes.icon}/>
     <Typography variant="h6" > photo album </Typography>
@@ -18,7 +18,7 @@ const App = () => {
 </AppBar>
 <main>
   <div className={classes.container}>
-    <Container maxWidth='sm' >
+    <Container maxWidth='xm' >
       <Typography variant='h2' align='center' color='textPrimary' gutterBottom  >
 Photo album 
       </Typography>
@@ -66,6 +66,7 @@ hello everbody i am trying to male this sentance as long as possible so everyone
     </Grid>
     </Container>
 </main>
+<footer className={classes.footer} ></footer>
 </>
   )
 }
