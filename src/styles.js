@@ -25,7 +25,7 @@ cardMedia:{
 },
 cardContent:{
     flexGrow:1
-},footer:{  backgroundColor:theme.palette.background.paper,
+},footer:{padding:'50px 0',  backgroundColor:theme.palette.background.paper,
 }
 }))
 export default useStyles

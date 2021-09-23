@@ -66,7 +66,10 @@ hello everbody i am trying to male this sentance as long as possible so everyone
     </Grid>
     </Container>
 </main>
-<footer className={classes.footer} ></footer>
+<footer className={classes.footer} >
+  <Typography variant ='h5' gutterBottom  align='center' >footer right here </Typography>
+  <Typography variant='subtitle1' align='center' gutterBottom >this is the end of the page thanks for visiting</Typography>
+</footer>
 </>
   )
 }
