@@ -12,7 +12,7 @@ const  Product = ({product}) => {
         
             <Card className={ClassNames.root} >
                 <CardMedia className={classes.madia}
-                image=''
+                image='..\..\..\assets\mobile.jpg'
                 title={product.name}
                 />
                 <CardContent>
