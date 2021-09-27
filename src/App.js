@@ -3,7 +3,6 @@ import 'fontsource-roboto'
 import {Products,Navbar} from './components'
 import {commerce} from './lib/commerce.js'
 const App = () => {
-  
 const [products,setProducts]=useState([])
 const [cart, setCart] = useState({})
     const fetchProducts = async () => {
