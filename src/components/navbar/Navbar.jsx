@@ -2,7 +2,7 @@ import React from 'react'
 import {AppBar,Toolbar,Badge,MenuItemm,Menu,Typography, IconButton} from '@material-ui/core'
 import {ShoppingCart} from '@material-ui/icons'
 import useStyles from './styles';
-const Navbar = () => {
+const Navbar = ({cartItems}) => {
     const classes=useStyles()
     return (
         <>
@@ -16,7 +16,7 @@ commerce.js
     <div className={classes.grow}/>
     <div className={classes.button} >
         <IconButton aria-label='show cart items' color='inherit' >
-            <Badge badgeContent={2} color='secondary' >
+            <Badge badgeContent={cartItems} color='secondary' >
                 <ShoppingCart/>
             </Badge>
         </IconButton>
