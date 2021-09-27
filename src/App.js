@@ -1,6 +1,6 @@
 import {useEffect,useState} from 'react'
 import 'fontsource-roboto'
-import {Products,Navbar} from './components'
+import {Products,Navbar,Cart} from './components'
 import {commerce} from './lib/commerce.js'
 const App = () => {
 const [products,setProducts]=useState([])
@@ -20,10 +20,12 @@ const handleAddCart=async(cartId,quantity)=>{
   let item = await commerce.cart.add(cartId,quantity)
   setCart(item.cart)
 }
+console.log(products)
 return (
     <>
     <Navbar cartItems={cart.total_items} />
       <Products onAddCart={handleAddCart} products={products}  />
+    <Cart cart={cart} />  
     </>
   )}
 
