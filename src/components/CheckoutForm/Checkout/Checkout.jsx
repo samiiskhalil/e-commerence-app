@@ -7,8 +7,10 @@ import makeStyles from './styles.js'
 const steps=['shipping process','payment details']
 const Checkout = () => {
     const classes=makeStyles()
-const [activeStep,setActiveStep]=useState(0) 
-   return (
+const [activeStep,setActiveStep]=useState(2) 
+const Form=()=> activeStep===0?<AddressForm/>:<PaymentForm/>
+const Confirmation=()=><div>ok</div>   
+return (
         <>
             <div className={classes.toolbar} />
             <main className={classes.layout} >
@@ -20,8 +22,10 @@ const [activeStep,setActiveStep]=useState(0)
 </Step>))}
 
 </Stepper>
+{activeStep===steps.length?<Confirmation/>:<Form/>}
                 </Paper>
             </main>
+
         </>
     )
 }
