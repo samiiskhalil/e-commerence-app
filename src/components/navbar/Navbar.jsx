@@ -4,7 +4,7 @@ import {AppBar,Toolbar,Badge,MenuItemm,Menu,Typography, IconButton} from '@mater
 import {ShoppingCart} from '@material-ui/icons'
 import useStyles from './styles';
 import { Link } from 'react-router-dom';
-const Navbar = ({cartItems}) => {
+const Navbar = ({totalItems}) => {
     let location =useLocation()
     const classes=useStyles()
     return (
@@ -19,7 +19,7 @@ commerce.js
     <div className={classes.grow}/>
     <div className={classes.button} >
       { location.pathname==='/'?  <IconButton aria-label='show cart items' color='inherit' >
-            <Badge component={Link} to='/cart' badgeContent={cartItems} color='secondary' >
+            <Badge component={Link} to='/cart' badgeContent={totalItems} color='secondary' >
                 <ShoppingCart/>
             </Badge>
         </IconButton>: null}

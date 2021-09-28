@@ -1,14 +1,15 @@
-import React from 'react'
-import {Card,CardMedia,CardContent,CardActions,Button,Typography,IconButton} from '@material-ui/core'
-import {ShoppingCard} from '@material-ui/icons'
-import { ClassNames } from '@emotion/react'
-import { AddShoppingCart } from '@material-ui/icons'
-import useStyles from './styles.js'
+import React from 'react';
+import { Card, CardMedia, CardContent, CardActions, Typography, IconButton } from '@material-ui/core';
+import { AddShoppingCart } from '@material-ui/icons';
 
-const  Product = ({product,onAddCart}) => {
-   const classes=useStyles()
+import useStyles from './styles';
 
-   return (
+const Product = ({ product, onAddToCart }) => {
+  const classes = useStyles();
+
+  const handleAddToCart = () => onAddToCart(product.id, 1);
+
+  return (
     <Card className={classes.root}>
       <CardMedia className={classes.media} image={product.media.source} title={product.name} />
       <CardContent>
@@ -23,12 +24,12 @@ const  Product = ({product,onAddCart}) => {
         <Typography dangerouslySetInnerHTML={{ __html: product.description }} variant="body2" color="textSecondary" component="p" />
       </CardContent>
       <CardActions disableSpacing className={classes.cardActions}>
-        <IconButton aria-label="Add to Cart" onClick={()=>onAddCart(product.id,1)} >
+        <IconButton aria-label="Add to Cart" onClick={handleAddToCart}>
           <AddShoppingCart />
         </IconButton>
       </CardActions>
     </Card>
   );
-}
+};
 
-export default  Product
+export default Product;
