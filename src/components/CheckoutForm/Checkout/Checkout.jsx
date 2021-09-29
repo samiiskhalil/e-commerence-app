@@ -6,20 +6,25 @@ import {Paper,Stepper,Step,StepLabel,Typography,CircularProgress,Divider,Button}
 import makeStyles from './styles.js'
 const steps=['shipping process','payment details']
 const Checkout = ({cart}) => {
-    const [token, setToken] = useState(null)
+    const [checkoutToken, setCheckoutToken] = useState(null)
     useEffect(() => {
-        try {
-            const fetchToken =async()=>{
-                const token =await commerce.checkout.generateToken(cart,{type:'cart'})
-                console.log(cart)
-setToken(token)            }
-        } catch (error) {
+        const generateToken =async()=>{
+            try
+            {
+            const token =await commerce.checkout.generateToken(cart.id,{type:'cart'})
+          console.log(token)
+            setCheckoutToken(token) 
             
-        }
-    }, [])
+                   }
+                   catch(error){
+console.log(cart)
+}
+}
+generateToken()
+  }, [])
     const classes=makeStyles()
-const [activeStep,setActiveStep]=useState(2) 
-const Form=()=> activeStep===0?<AddressForm/>:<PaymentForm/>
+const [activeStep,setActiveStep]=useState(0) 
+const Form=()=> activeStep===0?<AddressForm token={token} />:<PaymentForm/>
 const Confirmation=()=><div>ok</div>   
 return (
         <>

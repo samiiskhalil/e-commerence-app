@@ -15,6 +15,7 @@ const fetchShippingCountries=async(checkoutTokenId)=>{
 const {countries}=await commerce.services.localeListShippingCountries(checkoutTokenId)
 
 }
+fetchShippingCountries(cartToken.id)
     return (
         <>
             <Typography variant='h6' gutterBottom >shipping address</Typography>
