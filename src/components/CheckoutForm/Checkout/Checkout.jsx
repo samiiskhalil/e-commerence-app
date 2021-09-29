@@ -1,7 +1,6 @@
-import React from 'react'
 import PaymentForm from '../FormInput.jsx'
 import AddressForm from '../AddressForm.jsx' 
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import {Paper,Stepper,Step,StepLabel,Typography,CircularProgress,Divider,Button} from '@material-ui/core'
 import makeStyles from './styles.js'
 const steps=['shipping process','payment details']

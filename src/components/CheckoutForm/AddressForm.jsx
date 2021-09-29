@@ -11,8 +11,8 @@ const [shippingSubdivision, setShippingSubdivision] = useState('')
 const [shippingOptions, setShippingOptions] = useState([])
 const [shippingOption, setShippingOption] = useState('')
     const methods=useForm()
-const fetchCountries=async(cartTokenId)=>{
-const {countries}=await commerce.services.localeListShippingCountries(cartTokenId)
+const fetchShippingCountries=async(checkoutTokenId)=>{
+const {countries}=await commerce.services.localeListShippingCountries(checkoutTokenId)
 
 }
     return (
