@@ -17,14 +17,13 @@ const Checkout = ({cart}) => {
             
                    }
                    catch(error){
-console.log(cart)
 }
 }
 generateToken()
   }, [])
     const classes=makeStyles()
 const [activeStep,setActiveStep]=useState(0) 
-const Form=()=> activeStep===0?<AddressForm token={token} />:<PaymentForm/>
+const Form=()=> activeStep===0?checkoutToken&&<AddressForm checkoutToken={checkoutToken} />:<PaymentForm/>
 const Confirmation=()=><div>ok</div>   
 return (
         <>
