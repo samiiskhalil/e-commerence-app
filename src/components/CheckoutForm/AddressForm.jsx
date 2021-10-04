@@ -6,8 +6,8 @@ import { commerce } from '../../lib/commerce.js'
 const AddressForm = ({checkoutToken}) => {
 const [shippingCountries, setShippingCountries] = useState([])
 const [shippingCountry, setShippingCountry] = useState('')
-const [shippingSubdivisions, setShippingSubdivisions] = useState([])
-const [shippingSubdivision, setShippingSubdivision] = useState('')
+const [shippingSubDivisions, setShippingSubDivisions] = useState([])
+const [shippingSubDivision, setShippingSubDivision] = useState('')
 const [shippingOptions, setShippingOptions] = useState([])
 const [shippingOption, setShippingOption] = useState('')
     const methods=useForm()
@@ -16,14 +16,24 @@ const {countries}=await commerce.services.localeListShippingCountries(checkoutTo
 setShippingCountries(countries)
 console.log(shippingCountries)
 }
+const fetchShippingSubDivisions=async(shippingCountryId)=>{
+    const {subdivisions}=await commerce.services.localeListSubdivisions(shippingCountryId)
+    console.log(subDivisions)
+    setShippingSubDivisions(subdivisions)
+    console.log(shippingSubDivisions)
+}
 useEffect( async () => {
-  return await fetchShippingCountries(checkoutToken.id)
+   await fetchShippingCountries(checkoutToken.id)
 
 }, [])
-const s={
-id:"sr",name:'syria',id:'al',name:'albania'
-}
-const countries=Object.entries(shippingcountries).map(([code,name])=>({id:code,label:name}))
+useEffect(() => {
+  if(shippingCountry) fetchShippingSubDivisions(shippingCountry) 
+}, [shippingCountry])
+console.log(shippingSubDivisions)
+const countries=Object.entries(shippingCountries).map(([code,name])=>({id:code,label:name}))
+const subDivisions=Object.entries(shippingSubDivisions).map(([code,name])=>({
+    id:code,label:name
+}))
 return (
         <>
             <Typography variant='h6' gutterBottom >shipping address</Typography>
@@ -37,11 +47,25 @@ return (
 <CustomTextField required name='city' label='City' />
 <CustomTextField required name='zip' label='zip/postal code' />
 <Grid item xs={12} sm={6} >
-    <Select value={shippingCountry} name="country" onChange={(e)=>{setShippingCountry(e.target.value)}}>
+    <InputLabel>Select Country</InputLabel>
+    <Select value={shippingCountry} name="shipping country" fullWidth onChange={(e)=>{setShippingCountry(e.target.value)}}>
 {countries.map(country=>(
-    <MenuItem key={country.code} value={country.name} ></MenuItem>
+    <MenuItem key={country.id} value={country.id} >{country.label}</MenuItem>
 ))}
     </Select>
+</Grid>
+<Grid item xs={12} sm={6} >
+    <InputLabel>
+    Select Region
+    </InputLabel>
+<Select fullWidth onChange={(e)=>{setShippingSubDivision(e.target.value)}}>{
+    subDivisions.map((subDivision)=>(
+        <MenuItem value={subDivision.id} key={subDivision.id} >
+            {subDivision.label}
+            </MenuItem>
+        
+    ))}
+</Select>
 </Grid>
               </Grid>
           </form>
