@@ -8,7 +8,7 @@ const steps=['shipping process','payment details']
 const Checkout = ({cart}) => {
     const [checkoutToken, setCheckoutToken] = useState(null)
     const [activeStep, setActiveStep] = useState(0)
-    const [data, setData] = useState({})
+    const [shippingData, setShippingData] = useState({})
     useEffect(() => {
         const generateToken =async()=>{
             try
@@ -24,11 +24,13 @@ const Checkout = ({cart}) => {
 generateToken()
   }, [])
     const classes=makeStyles()
-const nextStep=()=>setActiveStep((previousStep)=>previousStep+1)
-const previousStep=()=>setActiveStep((previousStep)=>previousStep+1)
+    const nextStep =()=>setActiveStep((preActiveStep)=>preActiveStep+1)
+    const backStep=()=> setActiveStep((preActiveStep)=>preActiveStep-1)
 const next=(data)=>{
+    setActiveStep(1)
     console.log('asf')
-    setData(data)
+    setShippingData({... data})
+    nextStep() 
 }
 
 const Form=()=> activeStep===0?checkoutToken&&<AddressForm next={next} checkoutToken={checkoutToken} />:<PaymentForm/>
