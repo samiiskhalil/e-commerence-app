@@ -7,6 +7,8 @@ import makeStyles from './styles.js'
 const steps=['shipping process','payment details']
 const Checkout = ({cart}) => {
     const [checkoutToken, setCheckoutToken] = useState(null)
+    const [activeStep, setActiveStep] = useState(0)
+    const [data, setData] = useState({})
     useEffect(() => {
         const generateToken =async()=>{
             try
@@ -22,8 +24,14 @@ const Checkout = ({cart}) => {
 generateToken()
   }, [])
     const classes=makeStyles()
-const [activeStep,setActiveStep]=useState(0) 
-const Form=()=> activeStep===0?checkoutToken&&<AddressForm checkoutToken={checkoutToken} />:<PaymentForm/>
+const nextStep=()=>setActiveStep((previousStep)=>previousStep+1)
+const previousStep=()=>setActiveStep((previousStep)=>previousStep+1)
+const next=(data)=>{
+    console.log('asf')
+    setData(data)
+}
+
+const Form=()=> activeStep===0?checkoutToken&&<AddressForm next={next} checkoutToken={checkoutToken} />:<PaymentForm/>
 const Confirmation=()=><div>ok</div>   
 return (
         <>

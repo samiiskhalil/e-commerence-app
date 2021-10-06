@@ -1,9 +1,11 @@
 import React ,{useState,useEffect}from 'react'
+import {Link} from 'react-router-dom'
 import {InputLabel,Select,MenuItem,Button,Grid,Typography} from '@material-ui/core'
 import {useForm,FormProvider} from 'react-hook-form'
 import CustomTextField from './CustomTextField.jsx'
 import { commerce } from '../../lib/commerce.js'
-const AddressForm = ({checkoutToken}) => {
+import { NextPlan } from '@mui/icons-material'
+const AddressForm = ({checkoutToken,next}) => {
 const [shippingCountries, setShippingCountries] = useState([])
 const [shippingCountry, setShippingCountry] = useState('')
 const [shippingSubDivisions, setShippingSubDivisions] = useState([])
@@ -14,13 +16,16 @@ const [shippingOption, setShippingOption] = useState('')
 const fetchShippingCountries=async(checkoutTokenId)=>{
 const {countries}=await commerce.services.localeListShippingCountries(checkoutTokenId)
 setShippingCountries(countries)
-console.log(shippingCountries)
 }
 const fetchShippingSubDivisions=async(shippingCountryId)=>{
     const {subdivisions}=await commerce.services.localeListSubdivisions(shippingCountryId)
     console.log(subDivisions)
     setShippingSubDivisions(subdivisions)
     console.log(shippingSubDivisions)
+}
+const fetchShippingOptions=async(checkoutTokenId,country,region=null)=>{
+    const options =await commerce.checkout.getShippingOptions(checkoutTokenId,{country,region})
+    setShippingOptions(options)
 }
 useEffect( async () => {
    await fetchShippingCountries(checkoutToken.id)
@@ -29,16 +34,29 @@ useEffect( async () => {
 useEffect(() => {
   if(shippingCountry) fetchShippingSubDivisions(shippingCountry) 
 }, [shippingCountry])
-console.log(shippingSubDivisions)
+
+useEffect(() => {
+if(shippingSubDivision) fetchShippingOptions(checkoutToken.id,shippingCountry,shippingSubDivision)
+console.log('as')
+
+}, [shippingSubDivision])
 const countries=Object.entries(shippingCountries).map(([code,name])=>({id:code,label:name}))
 const subDivisions=Object.entries(shippingSubDivisions).map(([code,name])=>({
     id:code,label:name
 }))
+const options=shippingOptions.map(sO=>(
+    {id:sO.id,label:`${sO.description}-(${sO.price.formatted_with_symbol})`}
+))
+console.log(shippingOptions)
 return (
         <>
             <Typography variant='h6' gutterBottom >shipping address</Typography>
       <FormProvider {... methods}>
-          <form onSubmit=''>
+          <form onSubmit={
+          methods.handleSubmit((data)=>
+              next({... data,shippingCountry,shippingSubDivision,shippingOption})
+          )
+          }>
               <Grid container spacing={3} >
 <CustomTextField required name='firstname' label='first name' />
 <CustomTextField required name='last name' label='last name' />
@@ -67,11 +85,27 @@ return (
     ))}
 </Select>
 </Grid>
+<Grid>
+    <InputLabel>
+shipping option    </InputLabel>
+<Select fullWidth onChange={(e)=>{setShippingOption(e.target.value)}}>{
+    options.map((option)=>(
+        <MenuItem value={option.id} key={option.id} >
+            {option.label}
+            </MenuItem>
+        
+    ))}
+</Select>
+</Grid>
               </Grid>
+              <br />
+              <div style={{display:'flex',justifyContent:'space-between'}} >
+<Button variant='outlined' component={Link} to='/cart' color='secondary' >back to cart</Button>
+<Button variant='contained' color='primary' type='submit' >next step</Button>
+              </div>
           </form>
       </FormProvider>
         </>
-    )
-}
 
+)}
 export default AddressForm
