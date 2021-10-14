@@ -1,58 +1,108 @@
-import PaymentForm from '../FormInput.jsx'
-import AddressForm from '../AddressForm.jsx' 
-import { useState,useEffect } from 'react'
-import {commerce} from '../../../lib/commerce'
-import {Paper,Stepper,Step,StepLabel,Typography,CircularProgress,Divider,Button} from '@material-ui/core'
-import makeStyles from './styles.js'
-const steps=['shipping process','payment details']
-const Checkout = ({cart}) => {
-    const [checkoutToken, setCheckoutToken] = useState(null)
-    const [activeStep, setActiveStep] = useState(0)
-    const [shippingData, setShippingData] = useState({})
-    useEffect(() => {
-        const generateToken =async()=>{
-            try
-            {
-            const token =await commerce.checkout.generateToken(cart.id,{type:'cart'})
-          console.log(token)
-            setCheckoutToken(token) 
-            
-                   }
-                   catch(error){
-}
-}
-generateToken()
-  }, [])
-    const classes=makeStyles()
-    const nextStep =()=>setActiveStep((preActiveStep)=>preActiveStep+1)
-    const backStep=()=> setActiveStep((preActiveStep)=>preActiveStep-1)
-const next=(data)=>{
-    setActiveStep(1)
-    console.log('asf')
-    setShippingData({... data})
-    nextStep() 
-}
 
-const Form=()=> activeStep===0?checkoutToken&&<AddressForm next={next} checkoutToken={checkoutToken} />:<PaymentForm/>
-const Confirmation=()=><div>ok</div>   
-return (
-        <>
-            <div className={classes.toolbar} />
-            <main className={classes.layout} >
-                <Paper className={classes.paper} >
-                    <Typography variant='h3' align='center' >Checkout</Typography>
-<Stepper activeStep={activeStep} className={classes.stepper} >
-{steps.map(step=>(<Step key={step} >
-    <StepLabel >{step} </StepLabel>
-</Step>))}
+import React, { useState, useEffect } from 'react';
+import { CssBaseline, Paper, Stepper, Step, StepLabel, Typography, CircularProgress, Divider, Button } from '@material-ui/core';
+import { Link, useHistory } from 'react-router-dom';
 
-</Stepper>
-{activeStep===steps.length?<Confirmation/>:<Form/>}
-                </Paper>
-            </main>
+import { commerce } from '../../../lib/commerce';
+import AddressForm from '../AddressForm';
+import PaymentForm from '../PaymentForm';
+import useStyles from './styles';
 
-        </>
-    )
+const steps = ['Shipping address', 'Payment details'];
+
+const Checkout = ({ cart, onCaptureCheckout, order, error }) => {
+  const [isFinished, setIsFinished] = useState(null)
+  const [checkoutToken, setCheckoutToken] = useState(null);
+  const [activeStep, setActiveStep] = useState(0);
+  const [shippingData, setShippingData] = useState({});
+  const classes = useStyles();
+  const history = useHistory();
+
+  const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
+const timeOut=()=>{
+  setTimeout(() => {
+   setIsFinished(true)
+  }, 3000);
 }
+  useEffect(() => {
+    if (cart.id) {
+      const generateToken = async () => {
+        try {
+          const token = await commerce.checkout.generateToken(cart.id, { type: 'cart' });
 
-export default Checkout
+          setCheckoutToken(token);
+        } catch(error) {
+        history.push('/');
+        }
+      };
+
+      generateToken();
+    }
+  }, [cart]);
+
+  const next = (data) => {
+    setShippingData(data);
+
+    nextStep();
+  };
+
+  let Confirmation = () =>  (order.customer ? (
+    <>
+      <div>
+        <Typography variant="h5">Thank you for your purchase, {order.customer.firstname} {order.customer.lastname}!</Typography>
+        <Divider className={classes.divider} />
+        <Typography variant="subtitle2">Order ref: {order.customer_reference}</Typography>
+      </div>
+      <br />
+      <Button component={Link} variant="outlined" type="button" to="/">Back to home</Button>
+    </>
+  ) : isFinished ? ( <>
+    <div>
+      <Typography variant="h5">Thank you for your purchase.</Typography>
+      <Divider className={classes.divider} />
+    </div>
+    <br />
+    <Button component={Link} variant="outlined" type="button" to="/">Back to home</Button>
+  </>): (
+    <div className={classes.spinner}>
+      <CircularProgress />
+    </div>
+  ));
+
+  if (error) { 
+    Confirmation = () => (
+      <>
+        <Typography variant="h5">Error: {error}</Typography>
+        <br />
+        <Button component={Link} variant="outlined" type="button" to="/">Back to home</Button>
+      </>
+    );
+  }
+
+  const Form = () => (activeStep === 0
+    ? <AddressForm checkoutToken={checkoutToken} nextStep={nextStep}  next={next} />
+    : <PaymentForm checkoutToken={checkoutToken} nextStep={nextStep} backStep={backStep} shippingData={shippingData} onCaptureCheckout={onCaptureCheckout} />);
+
+  return (
+    <>
+      <CssBaseline />
+      <div className={classes.toolbar} />
+      <main className={classes.layout}>
+        <Paper className={classes.paper}>
+          <Typography variant="h4" align="center">Checkout</Typography>
+          <Stepper activeStep={activeStep} className={classes.stepper}>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          {activeStep === steps.length ? <Confirmation /> : checkoutToken && <Form />}
+        </Paper>
+      </main>
+    </>
+  );
+};
+
+export default Checkout;

@@ -8,16 +8,28 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
-
+  const [order,setOrder]=useState({})
   const fetchProducts = async () => {
     const { data } = await commerce.products.list();
 
     setProducts(data);
   };
-
+  const refreshCart=async()=>{
+    console.log('s')
+    const newCart=await commerce.cart.refresh()
+    setCart(newCart)
+  }
+const handleCaptureCheckout=async(checkoutTokenId,newOrder)=>{
+try{ const incomingOrder= await commerce.checkout.order(checkoutTokenId,newOrder)
+  setOrder(incomingOrder)
+refreshCart()
+}catch(error){
+setErrorMessage(error.data.error.message)}
+}
   const fetchCart = async () => {
     setCart(await commerce.cart.retrieve());
 };
+
 
   const handleAddToCart = async (productId, quantity) => {
     const item = await commerce.cart.add(productId, quantity);
@@ -43,11 +55,6 @@ const App = () => {
     setCart(response.cart);
   };
 
-  const refreshCart = async () => {
-    const newCart = await commerce.cart.refresh();
-
-    setCart(newCart);
-  };
 
   useEffect(() => {
     fetchProducts();
@@ -67,7 +74,12 @@ const App = () => {
             <Cart cart={cart} onUpdateCartQty={handleUpdateCartQty} onRemoveFromCart={handleRemoveFromCart} onEmptyCart={handleEmptyCart} />
           </Route>
           <Route exact path='/checkout'>
-            <Checkout cart={cart} />
+            <Checkout cart={cart} 
+            order={order}
+            onCaptureCheckout={handleCaptureCheckout}
+            error={errorMessage}
+          
+            />
               
             
           </Route>
